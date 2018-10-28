@@ -1,0 +1,37 @@
+The syntax for If-Then condition instrucution is as follows:
+
+IT{p{q{r}}} condition
+
+Where: 
+p gives the condition switch for the second instruction in the IT block
+q gives the condition switch for the third instruction in the IT block
+r gives the condition switch for the fourth instruction in the IT block
+'condition' gives the condition for the first instruction in the IT block
+The condition switch for the second, third and fourth istruction in the IT block can be either:
+
+T:Then. Applies the 'condition' to the instruction.
+E:Else. Applies the inverse condition of 'condition' to the instruction
+
+The operation of IT instruction makes up to four following instructions conditional.The conditions can be all the same, 
+or some of them can be the logical inverse of the others. The conditional instructions following the IT instruction form the IT block.
+The instructions in the IT block, including any branches, must specify the condition in the {condition} part of the syntax.
+
+REASON:The reason for the errors in the given code snippet is because of the following instructions in the IT block are not conditional.
+
+ITTTE LT ; or N != V
+MOV R3, #0x100
+MOV R8, #0x200
+MOV R7, #0x200
+MOV R6, #0x200
+As we can see in the above code snippet MOV instructions are not conditional.
+
+EXCEPTIONS:Exceptions can be taken between an IT instruction and the corresponding IT block, or within an IT block.
+Such an exception results in entry to the appropriate exception handler, with suitable return information in LR and stacked PSR.
+
+RESTRICTIONS:The restrictions when using an IT block are:
+1. A branch or any instruction that modifies the PC must either be outside an IT block or must be the last instruction inside the IT block like
+  ADD PC, PC, Rm
+  MOV PC, Rm
+  any LDM, LDR, or POP instruction that writes to the PC
+2. Do not branch to any instruction inside an IT block, except when returning from an exception handler
+3. Each instruction inside the IT block must specify a condition code suffix that is either the same or logical inverse as for the other instructions in the block.
